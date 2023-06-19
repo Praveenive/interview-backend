@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
         },
         contact :{ 
            type :Number,
+           maxllength:10
         },
         password : {
             type:String,

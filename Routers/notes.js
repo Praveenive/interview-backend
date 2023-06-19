@@ -5,7 +5,8 @@ const router = express.Router()
 
 router.get("/all", async(req,res)=>{
     try {
-        const notes  = await Notes.find()
+        const notes  = await Notes.find().populate("user","name")
+        console.log(notes)
         if(!notes){
             return res.status(400).json({data:"Could not find any notes"})
         }
@@ -17,10 +18,9 @@ router.get("/all", async(req,res)=>{
     }
 })
 
-router.get("/user", async(req,res)=>{
+router.get("/mynotes", async(req,res)=>{
     try {
         const users = await Notes.find({user:req.user._id}).populate("user","name")
-      
         console.log(users)
         if(!users){
            return res.status(400).json({data:"User not found"})
@@ -55,18 +55,19 @@ router.post("/add", async (req, res) => {
 })
 
 
-router.put("/edit:id", async(req,res)=>{
+router.put("/edit/:id", async (req, res) => {
     try {
-        const updatedNotes = await Notes.findByIdAndUpdate(
-            {_id: req.params._id},
-            {$set : req.body},
-            {new :true}
-        )
+        const updatedNotes = await Notes.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: req.body },
+            { new: true }
+        );
         if (!updatedNotes) {
-            return res.status(400).json({ message: "Error in saving the notes" })
+            return res
+                .status(400)
+                .json({ message: "Error Occured" })
         }
-        res.status(200).json({ message: "Notes saved Successfully", data: updatedNotes })
-        
+        res.status(200).json({ message: "Sucessfully updated", data: updatedNotes })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Internal server error" })

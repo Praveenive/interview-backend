@@ -8,7 +8,7 @@ export function dbConnection()
     }
 
 try {
-    mongoose.connect("mongodb://127.0.0.1:27017/interview", params)
+    mongoose.connect("mongodb+srv://praveenive:Praveen6@cluster0.4iggedc.mongodb.net/interview-app?retryWrites=true&w=majority", params)
     console.log("Database connected successfully")
 } catch (error) {
     console.log("error in Database",error)
